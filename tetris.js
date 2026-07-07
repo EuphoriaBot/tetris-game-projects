@@ -78,7 +78,16 @@ let gameLoop = () => {
 
 let update = () => { };
 
-let draw = () => { };
+let draw = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
+    drawSquares();
+    drawCurrentTetris();
+    drawNextShape();
+    if (gameOver) {
+        drawGameOver();
+    }
+};
 
 let getRandomShape = () => {
     return Object.create(shapes[Math.floor(Math.random() * shapes.length)]);
