@@ -12,7 +12,7 @@ class Tetris {
             for (let j = 0; j < this.template.length; j++) {
                 if (this.template[i][j] == 0) continue;
                 let realX = i + this.getTruncedPosition().x;
-                let realX = i + this.getTruncedPosition().y;
+                let realY = j + this.getTruncedPosition().y;
                 if (realY + 1 >= squareCountY) {
                     return false;
                 }
@@ -101,7 +101,10 @@ let update = () => {
         currentShape.y += 1;
     } else {
         for (let k = 0; k < currentShape.template.length; k++) {
-            for (let k = 0; k < currentShape.template.length; k++)
+            for (let l = 0; l < currentShape.template.length; l++) {
+                if (currentShape.template[k][l] == 0) continue
+                gameMap[currentShape.getTruncedPosition().y + l][currentShape.getTruncedPosition().k] = { imageX: currentShape.imageX, imageY: currentShape.imageY };
+            }
         }
         currentShape = nextShape;
         nextShape = getRandomShape();
@@ -134,7 +137,13 @@ let drawCurrentTetris = () => {
 };
 
 let drawSquares = () => {
-
+    for (let i = 0; i < gameMap.length; i++) {
+        let t = gameMap[i];
+        for (let j = 0; j < t.length; j++) {
+            if (t[j].imageX == -1) continue;
+            ctx.drawImage(image, t[j].imageX, t[j].imageY, imageSquareSize, imageSquareSize, j * size, i * size, size, size);
+        }
+    }
 };
 
 let drawNextShape = () => {
