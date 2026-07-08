@@ -181,5 +181,16 @@ let resetVars = () => {
     gameMap = initialTwoDArr;
 };
 
+window.addEventListener("keydown", (event) => {
+    if (event.keyCode == 37)
+        currentShape.moveLeft();
+    else if (event.keyCode == 38)
+        currentShape.changeRotation();
+    else if (event.keyCode == 39)
+        currentShape.moveRight();
+    else if (event.keyCode == 40)
+        currentShape.moveBottom();
+})
+
 resetVars();
 gameLoop();
