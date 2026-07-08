@@ -99,6 +99,12 @@ let update = () => {
     if (gameOver) return;
     if (currentShape.checkBottom()) {
         currentShape.y += 1;
+    } else {
+        for (let k = 0; k < currentShape.template.length; k++) {
+            for (let k = 0; k < currentShape.template.length; k++)
+        }
+        currentShape = nextShape;
+        nextShape = getRandomShape();
     }
 };
 
