@@ -47,7 +47,7 @@ class Tetris {
                 if (this.template[i][j] == 0) continue;
                 let realX = i + this.getTruncedPosition().x;
                 let realY = j + this.getTruncedPosition().y;
-                if (realX - 1 < 0) {
+                if (realX + 1 >= squareCountX) {
                     return false;
                 }
 
@@ -88,6 +88,19 @@ class Tetris {
                 this.template[i][last] = this.template[last][last - offset];
                 this.template[last][last - offset] = this.template[last - offset][first];
                 this.template[last - offset][first] = top;;
+            }
+        }
+        for (let i = 0; i < this.template.length; i++) {
+            for (let j = 0; j < this.template.length; j++) {
+                if (this.template[i][j] == 0) continue;
+                let realX = i + this.getTruncedPosition().x;
+                let realY = j + this.getTruncedPosition().y;
+                if (realX < 0 || realX >= squareCountX || realY < 0 || realY >= squareCountY) {
+                    this.template = tempTemplate;
+                    return false;
+                }
+
+                if (gameMap[realY][realX - 1].imageX != -1) return false;
             }
         }
     }
@@ -166,8 +179,13 @@ let update = () => {
                 gameMap[currentShape.getTruncedPosition().y + l][currentShape.getTruncedPosition().k] = { imageX: currentShape.imageX, imageY: currentShape.imageY };
             }
         }
+        deleteCompleteRows();
         currentShape = nextShape;
         nextShape = getRandomShape();
+        if (!currentShape.checkBottom()) {
+            gameOver = true;
+        }
+        score += 10;
     }
 };
 
