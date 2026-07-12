@@ -16,6 +16,9 @@ class Tetris {
                 if (realY + 1 >= squareCountY) {
                     return false;
                 }
+                if (gameMap[realY + 1][realX].imageX != -1) {
+                    return false;
+                }
             }
         }
         return true;
@@ -51,14 +54,16 @@ class Tetris {
                     return false;
                 }
 
-                if (gameMap[realY][realX - 1].imageX != -1) return false;
+                if (gameMap[realY][realX + 1].imageX != -1) return false;
             }
         }
         return true;
     }
 
     moveRight() {
-        return true;
+        if (this.checkRight()) {
+            this.x += 1;
+        }
     }
 
     moveLeft() {
@@ -101,7 +106,7 @@ class Tetris {
                     return false;
                 }
 
-                if (gameMap[realY][realX - 1].imageX != -1) return false;
+                if (gameMap[realY][realX].imageX != -1);
             }
         }
     }
@@ -202,8 +207,8 @@ let update = () => {
     } else {
         for (let k = 0; k < currentShape.template.length; k++) {
             for (let l = 0; l < currentShape.template.length; l++) {
-                if (currentShape.template[k][l] == 0) continue
-                gameMap[currentShape.getTruncedPosition().y + l][currentShape.getTruncedPosition().k] = { imageX: currentShape.imageX, imageY: currentShape.imageY };
+                if (currentShape.template[k][l] == 0) continue;
+                gameMap[currentShape.getTruncedPosition().y + l][currentShape.getTruncedPosition().x + k] = { imageX: currentShape.imageX, imageY: currentShape.imageY };
             }
         }
         deleteCompleteRows();
@@ -257,7 +262,7 @@ let drawNextShape = () => {
     for (let i = 0; i < nextShape.template.length; i++) {
         for (let j = 0; j < nextShape.template.length; j++) {
             if (nextShape.template[i][j] == 0) continue;
-            nctx.drawImage(image, nextShape.imageX, nextShape.imageY, imageSquareSize.imageSquareSize, size * i, size * j + size, size, size);
+            nctx.drawImage(image, nextShape.imageX, nextShape.imageY, imageSquareSize, imageSquareSize, size * i, size * j + size, size, size);
         }
     }
 };
@@ -267,6 +272,12 @@ let drawScore = () => {
     sctx.font = "64px Poppins";
     sctx.fillStyle = "black";
     sctx.fillText(score, 10, 50);
+};
+
+let drawGameOver = () => {
+    ctx.font = "64px Poppins";
+    ctx.fillStyle = "black";
+    ctx.fillText("Game Over", 10, canvas.height / 2);
 };
 
 let draw = () => {
@@ -289,7 +300,7 @@ let resetVars = () => {
     initialTwoDArr = []
     for (let i = 0; i < squareCountY; i++) {
         let temp = [];
-        for (let j = 0; j < squareCount; j++) {
+        for (let j = 0; j < squareCountX; j++) {
             temp.push({ imageX: -1, imageY: -1 });
         }
         initialTwoDArr.push(temp);
